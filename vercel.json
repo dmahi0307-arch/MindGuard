@@ -1,12 +1,12 @@
 {
-  "": "https://openapi.vercel.sh/vercel.json",
-  "buildCommand": "cd web && npm install && npm run build",
-  "outputDirectory": "web/dist",
+  "$schema": "https://openapi.vercel.sh/vercel.json",
   "framework": "vite",
+  "buildCommand": "npm --prefix web run build",
+  "outputDirectory": "web/dist",
   "rewrites": [
     {
       "source": "/mindwell/(.*)",
-      "destination": "/mindwell/"
+      "destination": "/mindwell/$1"
     },
     {
       "source": "/(.*)",
