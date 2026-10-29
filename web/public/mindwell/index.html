@@ -1,0 +1,546 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MindWell — AI Emotional Intelligence Chatbot</title>
+  <meta name="description" content="MindWell is a deep learning-enabled emotional intelligence chatbot providing real-time mental wellness support, emotion detection, and empathetic conversations." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- Animated background particles -->
+<div id="particles-container" aria-hidden="true"></div>
+
+<!-- ===================== LANDING PAGE ===================== -->
+<section id="landing-page" class="page active">
+  <div class="landing-content">
+    <div class="landing-badge">
+      <span class="badge-dot"></span>
+      AI-Powered Mental Wellness
+    </div>
+    <h1 class="landing-title">
+      Meet <span class="gradient-text">MindWell</span>
+      <br/>Your Emotional Intelligence Companion
+    </h1>
+    <p class="landing-subtitle">
+      Powered by deep learning &amp; transformer models — MindWell detects your emotions
+      in real time, understands your context, and delivers empathetic support whenever you need it.
+    </p>
+
+    <div class="feature-pills">
+      <span class="pill">&#128522; Emotion Detection</span>
+      <span class="pill">&#128172; Empathetic AI</span>
+      <span class="pill">&#128202; Wellness Dashboard</span>
+      <span class="pill">&#129344; Stress Relief</span>
+      <span class="pill">&#128680; Crisis Support</span>
+    </div>
+
+    <div class="landing-cta">
+      <button id="start-btn" class="btn-primary" onclick="navigateTo('chat-page')">
+        Start Talking to MindWell
+      </button>
+      <button class="btn-secondary" onclick="navigateTo('dashboard-page')">
+        View Analytics Dashboard
+      </button>
+    </div>
+
+    <div class="stats-row">
+      <div class="stat-card">
+        <div class="stat-value">95.2%</div>
+        <div class="stat-label">Detection Accuracy</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">7</div>
+        <div class="stat-label">Emotions Classified</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">BERT</div>
+        <div class="stat-label">Transformer Model</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-value">24/7</div>
+        <div class="stat-label">Always Available</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===================== CHAT PAGE ===================== -->
+<section id="chat-page" class="page">
+  <div class="app-layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-header">
+        <button class="back-btn" onclick="navigateTo('landing-page')" title="Back to Home">&#8592;</button>
+        <div class="logo">
+          <div class="logo-icon">M</div>
+          <span class="logo-text">MindWell</span>
+        </div>
+        <button class="hamburger" id="hamburger-btn" onclick="toggleSidebar()" title="Toggle sidebar">&#9776;</button>
+      </div>
+
+      <nav class="sidebar-nav">
+        <button class="nav-item active" onclick="switchTab('chat', this)" id="nav-chat">
+          <span class="nav-icon">&#128172;</span>
+          <span>Chat</span>
+        </button>
+        <button class="nav-item" onclick="switchTab('dashboard', this)" id="nav-dashboard">
+          <span class="nav-icon">&#128202;</span>
+          <span>Dashboard</span>
+        </button>
+        <button class="nav-item" onclick="switchTab('resources', this)" id="nav-resources">
+          <span class="nav-icon">&#128737;</span>
+          <span>Resources</span>
+        </button>
+      </nav>
+
+      <!-- Current Emotion Panel -->
+      <div class="emotion-panel" id="emotion-panel">
+        <div class="emotion-panel-title">Current Emotion</div>
+        <div class="emotion-display" id="current-emotion-display">
+          <div class="emotion-emoji" id="current-emoji">&#129303;</div>
+          <div class="emotion-name" id="current-emotion-name">Awaiting input...</div>
+        </div>
+        <div class="confidence-bar-container">
+          <div class="confidence-label">
+            <span>Confidence</span>
+            <span id="confidence-value">&#8212;</span>
+          </div>
+          <div class="confidence-track">
+            <div class="confidence-fill" id="confidence-fill" style="width:0%"></div>
+          </div>
+        </div>
+        <div class="sentiment-badge" id="sentiment-badge">Sentiment: &#8212;</div>
+      </div>
+
+      <!-- Session Stats -->
+      <div class="session-stats">
+        <div class="session-stats-title">Session Stats</div>
+        <div class="session-stat-row">
+          <span>Messages</span>
+          <span id="msg-count">0</span>
+        </div>
+        <div class="session-stat-row">
+          <span>Emotions detected</span>
+          <span id="emotions-detected">0</span>
+        </div>
+        <div class="session-stat-row">
+          <span>Wellness tips sent</span>
+          <span id="tips-sent">0</span>
+        </div>
+      </div>
+
+      <div class="sidebar-footer">
+        <button class="clear-btn" onclick="clearChat()" id="clear-chat-btn">Clear Chat</button>
+        <button class="dashboard-link-btn" onclick="navigateTo('dashboard-page')">Full Dashboard</button>
+      </div>
+    </aside>
+
+    <!-- Main content area -->
+    <main class="main-area">
+
+      <!-- CHAT TAB -->
+      <div id="tab-chat" class="tab-content active">
+        <div class="chat-header">
+          <div class="chat-header-info">
+            <div class="bot-avatar-small">
+              <div class="bot-pulse"></div>
+              M
+            </div>
+            <div>
+              <div class="bot-name">MindWell AI</div>
+              <div class="bot-status">
+                <span class="status-dot"></span>
+                Online &#8226; Emotion detection active
+              </div>
+            </div>
+          </div>
+          <div class="chat-header-actions">
+            <div class="model-badge">BERT &#183; GPT Transformer</div>
+          </div>
+        </div>
+
+        <div class="chat-messages" id="chat-messages"></div>
+
+        <!-- Typing indicator -->
+        <div class="typing-indicator hidden" id="typing-indicator">
+          <div class="typing-avatar">M</div>
+          <div class="typing-dots">
+            <span></span><span></span><span></span>
+          </div>
+          <span class="typing-text">MindWell is thinking...</span>
+        </div>
+
+        <!-- Quick prompts -->
+        <div class="quick-prompts" id="quick-prompts">
+          <button class="qp-btn" onclick="sendQuickPrompt('I feel really anxious and stressed today')">&#128560; I feel anxious</button>
+          <button class="qp-btn" onclick="sendQuickPrompt('I am feeling really happy and grateful today!')">&#128522; I feel happy</button>
+          <button class="qp-btn" onclick="sendQuickPrompt('I have been feeling so sad and hopeless lately')">&#128546; I feel sad</button>
+          <button class="qp-btn" onclick="sendQuickPrompt('Everything makes me so angry right now')">&#128545; I feel angry</button>
+          <button class="qp-btn" onclick="sendQuickPrompt('I need help, I cant take this anymore')">&#128682; Need help</button>
+          <button class="qp-btn" onclick="sendQuickPrompt('Tell me some breathing exercises')">&#129344; Breathing exercises</button>
+        </div>
+
+        <div class="chat-input-area">
+          <div class="input-wrapper">
+            <textarea
+              id="message-input"
+              class="message-input"
+              placeholder="Share how you're feeling... (Press Enter to send)"
+              rows="1"
+              maxlength="500"
+              onkeydown="handleKeyDown(event)"
+              oninput="autoResize(this)"
+            ></textarea>
+            <div class="input-actions">
+              <span class="char-count" id="char-count">0/500</span>
+              <button id="send-btn" class="send-btn" onclick="sendMessage()" title="Send message">&#10148;</button>
+            </div>
+          </div>
+          <div class="input-footer">
+            <span>MindWell provides emotional support &mdash; not a replacement for professional mental health care.</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- DASHBOARD TAB -->
+      <div id="tab-dashboard" class="tab-content">
+        <div class="dashboard-header">
+          <h2>Emotion Analytics Dashboard</h2>
+          <p>Real-time tracking of your emotional patterns during this session</p>
+        </div>
+        <div class="dashboard-grid">
+          <div class="dash-card wide">
+            <div class="dash-card-title">Emotion Timeline</div>
+            <canvas id="emotionTimelineChart" height="200"></canvas>
+          </div>
+          <div class="dash-card">
+            <div class="dash-card-title">Emotion Distribution</div>
+            <canvas id="emotionDonutChart" height="220"></canvas>
+          </div>
+          <div class="dash-card">
+            <div class="dash-card-title">Sentiment Breakdown</div>
+            <canvas id="sentimentBarChart" height="220"></canvas>
+          </div>
+          <div class="dash-card wide">
+            <div class="dash-card-title">Model Performance Metrics</div>
+            <div class="metrics-row">
+              <div class="metric-card">
+                <div class="metric-label">Proposed Model</div>
+                <div class="metric-bars">
+                  <div class="metric-bar-row"><span>Accuracy</span><div class="mbar"><div class="mbar-fill" style="width:95.2%;background:linear-gradient(90deg,#7c3aed,#06b6d4)"></div></div><span>95.2%</span></div>
+                  <div class="metric-bar-row"><span>Precision</span><div class="mbar"><div class="mbar-fill" style="width:94.6%;background:linear-gradient(90deg,#7c3aed,#06b6d4)"></div></div><span>94.6%</span></div>
+                  <div class="metric-bar-row"><span>Recall</span><div class="mbar"><div class="mbar-fill" style="width:94.1%;background:linear-gradient(90deg,#7c3aed,#06b6d4)"></div></div><span>94.1%</span></div>
+                </div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-label">BERT Baseline</div>
+                <div class="metric-bars">
+                  <div class="metric-bar-row"><span>Accuracy</span><div class="mbar"><div class="mbar-fill" style="width:94.8%;background:linear-gradient(90deg,#0891b2,#22d3ee)"></div></div><span>94.8%</span></div>
+                  <div class="metric-bar-row"><span>Precision</span><div class="mbar"><div class="mbar-fill" style="width:93.5%;background:linear-gradient(90deg,#0891b2,#22d3ee)"></div></div><span>93.5%</span></div>
+                  <div class="metric-bar-row"><span>Recall</span><div class="mbar"><div class="mbar-fill" style="width:93.2%;background:linear-gradient(90deg,#0891b2,#22d3ee)"></div></div><span>93.2%</span></div>
+                </div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-label">Bi-LSTM</div>
+                <div class="metric-bars">
+                  <div class="metric-bar-row"><span>Accuracy</span><div class="mbar"><div class="mbar-fill" style="width:91.7%;background:linear-gradient(90deg,#0d9488,#6ee7b7)"></div></div><span>91.7%</span></div>
+                  <div class="metric-bar-row"><span>Precision</span><div class="mbar"><div class="mbar-fill" style="width:90.9%;background:linear-gradient(90deg,#0d9488,#6ee7b7)"></div></div><span>90.9%</span></div>
+                  <div class="metric-bar-row"><span>Recall</span><div class="mbar"><div class="mbar-fill" style="width:90.4%;background:linear-gradient(90deg,#0d9488,#6ee7b7)"></div></div><span>90.4%</span></div>
+                </div>
+              </div>
+              <div class="metric-card">
+                <div class="metric-label">LSTM</div>
+                <div class="metric-bars">
+                  <div class="metric-bar-row"><span>Accuracy</span><div class="mbar"><div class="mbar-fill" style="width:89.4%;background:linear-gradient(90deg,#7e22ce,#a78bfa)"></div></div><span>89.4%</span></div>
+                  <div class="metric-bar-row"><span>Precision</span><div class="mbar"><div class="mbar-fill" style="width:88.1%;background:linear-gradient(90deg,#7e22ce,#a78bfa)"></div></div><span>88.1%</span></div>
+                  <div class="metric-bar-row"><span>Recall</span><div class="mbar"><div class="mbar-fill" style="width:87.9%;background:linear-gradient(90deg,#7e22ce,#a78bfa)"></div></div><span>87.9%</span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RESOURCES TAB -->
+      <div id="tab-resources" class="tab-content">
+        <div class="dashboard-header">
+          <h2>Mental Wellness Resources</h2>
+          <p>Interactive evidence-based tools — click, check off, and engage!</p>
+        </div>
+
+        <!-- Mood Check-In Banner -->
+        <div class="mood-checkin-bar" id="mood-checkin-bar">
+          <span class="mood-checkin-label">&#127774; How are you feeling right now?</span>
+          <div class="mood-emoji-row">
+            <button class="mood-emoji-btn" onclick="selectMood(this,'Terrible','&#128556;')" title="Terrible">&#128556;</button>
+            <button class="mood-emoji-btn" onclick="selectMood(this,'Bad','&#128532;')" title="Bad">&#128532;</button>
+            <button class="mood-emoji-btn" onclick="selectMood(this,'Okay','&#128528;')" title="Okay">&#128528;</button>
+            <button class="mood-emoji-btn" onclick="selectMood(this,'Good','&#128578;')" title="Good">&#128578;</button>
+            <button class="mood-emoji-btn" onclick="selectMood(this,'Great','&#129321;')" title="Great">&#129321;</button>
+          </div>
+          <span class="mood-selected-label" id="mood-selected-label"></span>
+        </div>
+
+        <div class="resources-grid">
+
+          <!-- 1. Box Breathing — with inline animated preview -->
+          <div class="resource-card breathing-card">
+            <div class="res-card-top">
+              <div class="resource-icon">&#129344;</div>
+              <div>
+                <h3>Box Breathing</h3>
+                <p>A powerful stress-reduction technique used by military and athletes.</p>
+              </div>
+            </div>
+            <div class="breath-preview" id="breath-preview">
+              <div class="breath-ring" id="breath-ring-inline">
+                <span id="breath-label-inline">Tap Start</span>
+              </div>
+              <div class="breath-steps-row">
+                <div class="bs" id="bs1">&#8593; Inhale</div>
+                <div class="bs" id="bs2">&#9632; Hold</div>
+                <div class="bs" id="bs3">&#8595; Exhale</div>
+                <div class="bs" id="bs4">&#9632; Hold</div>
+              </div>
+            </div>
+            <div class="breath-btn-row">
+              <button class="resource-btn" id="inline-breath-btn" onclick="toggleInlineBreath()">&#9654; Start</button>
+              <button class="resource-btn resource-btn-ghost" onclick="startBreathingExercise()">Full Screen</button>
+            </div>
+          </div>
+
+          <!-- 2. Affirmation Deck — swipeable cards -->
+          <div class="resource-card affirmation-card">
+            <div class="res-card-top">
+              <div class="resource-icon">&#127775;</div>
+              <div>
+                <h3>Affirmation Deck</h3>
+                <p>Tap the card to flip. Like to save your favourites.</p>
+              </div>
+            </div>
+            <div class="affirmation-deck-wrap">
+              <div class="aff-deck" id="aff-deck" onclick="flipAffirmation()">
+                <div class="aff-front" id="aff-front">
+                  <span class="aff-tap-hint">Tap to reveal &#128161;</span>
+                </div>
+                <div class="aff-back" id="aff-back">
+                  <span id="aff-text-display">"You are stronger than you think."</span>
+                </div>
+              </div>
+              <div class="aff-count-row">
+                <span id="aff-counter" class="aff-counter">1 / 12</span>
+              </div>
+            </div>
+            <div class="aff-btn-row">
+              <button class="aff-action-btn like-btn" id="aff-like-btn" onclick="likeAffirmation()" title="Love this">&#10084;</button>
+              <button class="resource-btn" onclick="nextAffirmation()">Next &#8594;</button>
+              <button class="aff-action-btn share-btn" onclick="copyAffirmation()" title="Copy">&#128203;</button>
+            </div>
+            <div class="liked-count" id="liked-count"></div>
+          </div>
+
+          <!-- 3. 5-4-3-2-1 Grounding — interactive checklist -->
+          <div class="resource-card grounding-card">
+            <div class="res-card-top">
+              <div class="resource-icon">&#127807;</div>
+              <div>
+                <h3>5-4-3-2-1 Grounding</h3>
+                <p>Tap each sense as you complete it to ground yourself.</p>
+              </div>
+            </div>
+            <div class="grounding-interactive" id="grounding-interactive">
+              <div class="ground-item" id="gi-0" onclick="checkGround(0)">
+                <div class="gi-check" id="gc-0">&#128065;</div>
+                <div class="gi-text"><strong>5 things</strong> I can <em>see</em></div>
+                <div class="gi-done hidden" id="gd-0">&#10003;</div>
+              </div>
+              <div class="ground-item" id="gi-1" onclick="checkGround(1)">
+                <div class="gi-check" id="gc-1">&#9995;</div>
+                <div class="gi-text"><strong>4 things</strong> I can <em>touch</em></div>
+                <div class="gi-done hidden" id="gd-1">&#10003;</div>
+              </div>
+              <div class="ground-item" id="gi-2" onclick="checkGround(2)">
+                <div class="gi-check" id="gc-2">&#128266;</div>
+                <div class="gi-text"><strong>3 things</strong> I can <em>hear</em></div>
+                <div class="gi-done hidden" id="gd-2">&#10003;</div>
+              </div>
+              <div class="ground-item" id="gi-3" onclick="checkGround(3)">
+                <div class="gi-check" id="gc-3">&#127801;</div>
+                <div class="gi-text"><strong>2 things</strong> I can <em>smell</em></div>
+                <div class="gi-done hidden" id="gd-3">&#10003;</div>
+              </div>
+              <div class="ground-item" id="gi-4" onclick="checkGround(4)">
+                <div class="gi-check" id="gc-4">&#127851;</div>
+                <div class="gi-text"><strong>1 thing</strong> I can <em>taste</em></div>
+                <div class="gi-done hidden" id="gd-4">&#10003;</div>
+              </div>
+            </div>
+            <div class="ground-progress-row">
+              <div class="ground-prog-track"><div class="ground-prog-fill" id="ground-prog-fill" style="width:0%"></div></div>
+              <span id="ground-prog-label">0 / 5</span>
+            </div>
+            <div class="ground-complete hidden" id="ground-complete">
+              &#127881; You're grounded! Take a deep breath. &#129311;
+            </div>
+            <button class="resource-btn-ghost-sm" onclick="resetGrounding()">Reset</button>
+          </div>
+
+          <!-- 4. Crisis Hotlines — click to copy -->
+          <div class="resource-card emergency">
+            <div class="res-card-top">
+              <div class="resource-icon">&#128680;</div>
+              <div>
+                <h3>Crisis Support Hotlines</h3>
+                <p>Tap a number to copy it instantly. You are not alone. &#10084;</p>
+              </div>
+            </div>
+            <div class="hotlines">
+              <div class="hotline-row clickable" onclick="copyHotline('9152987821', this)">
+                <strong>iCall (India)</strong><span class="hl-num">9152987821 <em class="copy-hint">tap to copy</em></span>
+              </div>
+              <div class="hotline-row clickable" onclick="copyHotline('18602662345', this)">
+                <strong>Vandrevala Foundation</strong><span class="hl-num">1860-2662-345 <em class="copy-hint">tap to copy</em></span>
+              </div>
+              <div class="hotline-row clickable" onclick="copyHotline('+912227546669', this)">
+                <strong>AASRA</strong><span class="hl-num">+91 22 27546669 <em class="copy-hint">tap to copy</em></span>
+              </div>
+              <div class="hotline-row clickable" onclick="copyHotline('+914424640050', this)">
+                <strong>WHO Helpline</strong><span class="hl-num">+91 44-24640050 <em class="copy-hint">tap to copy</em></span>
+              </div>
+            </div>
+            <div class="crisis-note">&#128172; Talking to someone is a sign of strength, not weakness.</div>
+          </div>
+
+          <!-- 5. Sleep Checklist — interactive tick-off -->
+          <div class="resource-card">
+            <div class="res-card-top">
+              <div class="resource-icon">&#128164;</div>
+              <div>
+                <h3>Sleep Hygiene Checklist</h3>
+                <p>Check off what you're doing tonight for better rest.</p>
+              </div>
+            </div>
+            <div class="checklist" id="sleep-checklist">
+              <label class="check-item"><input type="checkbox" onchange="updateChecklist('sleep')"><span>&#127769; Consistent sleep schedule</span></label>
+              <label class="check-item"><input type="checkbox" onchange="updateChecklist('sleep')"><span>&#128244; No screens 1hr before bed</span></label>
+              <label class="check-item"><input type="checkbox" onchange="updateChecklist('sleep')"><span>&#10052; Cool &amp; dark bedroom</span></label>
+              <label class="check-item"><input type="checkbox" onchange="updateChecklist('sleep')"><span>&#9749; No caffeine after 2 PM</span></label>
+              <label class="check-item"><input type="checkbox" onchange="updateChecklist('sleep')"><span>&#129344; Relaxation routine</span></label>
+            </div>
+            <div class="checklist-progress">
+              <div class="cl-prog-track"><div class="cl-prog-fill" id="sleep-prog" style="width:0%"></div></div>
+              <span id="sleep-score">0 / 5 habits</span>
+            </div>
+          </div>
+
+          <!-- 6. Daily Wellness Challenge — interactive -->
+          <div class="resource-card">
+            <div class="res-card-top">
+              <div class="resource-icon">&#127939;</div>
+              <div>
+                <h3>Today's Wellness Challenge</h3>
+                <p>Complete today's micro-challenge for your mental health.</p>
+              </div>
+            </div>
+            <div class="daily-challenge" id="daily-challenge-box">
+              <div class="challenge-card" id="challenge-card">
+                <div class="challenge-emoji" id="challenge-emoji">&#127946;</div>
+                <div class="challenge-text" id="challenge-text">Take a 10-minute walk outside and notice 3 things you've never seen before.</div>
+              </div>
+              <div class="challenge-actions">
+                <button class="challenge-btn done" id="challenge-done-btn" onclick="markChallengeDone()">&#10003; Done!</button>
+                <button class="challenge-btn skip" onclick="nextChallenge()">&#8635; New challenge</button>
+              </div>
+              <div class="challenge-streak">
+                <span>&#128293; Streak: </span><strong id="streak-count">0</strong> day(s)
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+    </main>
+  </div>
+</section>
+
+<!-- ===================== DASHBOARD PAGE (standalone) ===================== -->
+<section id="dashboard-page" class="page">
+  <div class="standalone-dash">
+    <div class="standalone-dash-header">
+      <button class="back-btn" onclick="navigateTo('landing-page')">&#8592; Back</button>
+      <div class="logo">
+        <div class="logo-icon">M</div>
+        <span class="logo-text">MindWell Analytics</span>
+      </div>
+      <button class="btn-primary-sm" onclick="navigateTo('chat-page')">Open Chat</button>
+    </div>
+    <div class="standalone-dash-content">
+      <div class="dash-hero-stats">
+        <div class="hero-stat">
+          <div class="hero-stat-icon">&#127919;</div>
+          <div class="hero-stat-value">95.2%</div>
+          <div class="hero-stat-label">Model Accuracy</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-icon">&#128522;</div>
+          <div class="hero-stat-value">7</div>
+          <div class="hero-stat-label">Emotions Tracked</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-icon">&#128172;</div>
+          <div class="hero-stat-value" id="dash-msg-count">0</div>
+          <div class="hero-stat-label">Total Messages</div>
+        </div>
+        <div class="hero-stat">
+          <div class="hero-stat-icon">&#129504;</div>
+          <div class="hero-stat-value">91.7%</div>
+          <div class="hero-stat-label">F1 Score</div>
+        </div>
+      </div>
+      <div class="dashboard-grid">
+        <div class="dash-card wide">
+          <div class="dash-card-title">Live Emotion Timeline (Session)</div>
+          <canvas id="emotionTimelineChart2" height="180"></canvas>
+        </div>
+        <div class="dash-card">
+          <div class="dash-card-title">Emotion Distribution</div>
+          <canvas id="emotionDonutChart2" height="220"></canvas>
+        </div>
+        <div class="dash-card">
+          <div class="dash-card-title">Sentiment Analysis</div>
+          <canvas id="sentimentBarChart2" height="220"></canvas>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Breathing Exercise Modal -->
+<div id="breathing-modal" class="modal-overlay hidden">
+  <div class="modal-card">
+    <button class="modal-close" onclick="closeBreathing()">&#10005;</button>
+    <h3>Box Breathing Exercise</h3>
+    <div class="breathing-visual">
+      <div class="breathing-circle" id="breathing-circle">
+        <div class="breathing-inner" id="breathing-inner">
+          <span id="breathing-phase">Ready</span>
+          <span id="breathing-count" class="breathing-count-num"></span>
+        </div>
+      </div>
+    </div>
+    <div id="breathing-instruction" class="breathing-instruction">Click Start to begin your guided breathing session.</div>
+    <button id="breathing-start-btn" class="btn-primary" onclick="toggleBreathing()">Start</button>
+  </div>
+</div>
+
+<script src="app.js"></script>
+</body>
+</html>

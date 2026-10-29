@@ -1,6 +1,16 @@
 {
-  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "": "https://openapi.vercel.sh/vercel.json",
   "buildCommand": "npm run build",
   "outputDirectory": "dist",
-  "framework": "vite"
+  "framework": "vite",
+  "rewrites": [
+    {
+      "source": "/mindwell/(.*)",
+      "destination": "/mindwell/"
+    },
+    {
+      "source": "/(.*)",
+      "destination": "/index.html"
+    }
+  ]
 }
