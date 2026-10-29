@@ -1,0 +1,35 @@
+# Dependencies
+node_modules/
+.venv/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Build outputs
+dist/
+build/
+.expo/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.vscode/
+.idea/
+
+# Logs
+*.log
+npm-debug.log*
+
+# Coverage
+coverage/
+*.metadata.json
+
+# Python / Django
+__pycache__/
+*.py[cod]
+django_backend/db.sqlite3
+django_backend/staticfiles/

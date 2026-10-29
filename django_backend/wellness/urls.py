@@ -1,0 +1,33 @@
+from django.urls import path
+
+from .views import (
+    burnout_risk_view,
+    health_view,
+    login_view,
+    mood_history_view,
+    mood_view,
+    register_token_view,
+    register_view,
+    send_alert_view,
+    text_interaction_view,
+    verify_view,
+    video_interaction_view,
+    voice_interaction_view,
+)
+
+urlpatterns = [
+    path("health", health_view, name="api-health"),
+    path("health/", health_view, name="api-health-slash"),
+    path("auth/register", register_view, name="auth-register"),
+    path("auth/login", login_view, name="auth-login"),
+    path("auth/verify", verify_view, name="auth-verify"),
+    path("interactions/text", text_interaction_view, name="interaction-text"),
+    path("interactions/voice", voice_interaction_view, name="interaction-voice"),
+    path("interactions/video", video_interaction_view, name="interaction-video"),
+    path("mood", mood_view, name="mood"),
+    path("mood/", mood_view, name="mood-slash"),
+    path("mood/history", mood_history_view, name="mood-history"),
+    path("mood/burnout-risk", burnout_risk_view, name="burnout-risk"),
+    path("notifications/register-token", register_token_view, name="register-token"),
+    path("notifications/send-alert", send_alert_view, name="send-alert"),
+]
