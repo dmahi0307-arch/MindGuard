@@ -1,0 +1,32 @@
+{
+  "$schema": "https://openapi.vercel.sh/vercel.json",
+  "services": {
+    "mindguard-django-api": {
+      "root": ".",
+      "framework": "django",
+      "buildCommand": "pip install -r requirements.txt"
+    },
+    "backend": {
+      "root": "backend",
+      "framework": "express"
+    },
+    "web": {
+      "root": "web",
+      "framework": "vite"
+    }
+  },
+  "rewrites": [
+    {
+      "source": "/api/(.*)",
+      "destination": {
+        "service": "backend"
+      }
+    },
+    {
+      "source": "/(.*)",
+      "destination": {
+        "service": "mindguard-django-api"
+      }
+    }
+  ]
+}
